@@ -1,0 +1,44 @@
+# Dependencies (nếu sau này cài thêm thư viện Node)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Chrome Extension Package & Certificate (Quan trọng: bảo mật khóa riêng tư)
+*.pem
+*.crx
+*.zip
+dist/
+build/
+
+# Environment Variables & Secrets (tránh lộ API keys)
+.env
+.env.local
+.env.*.local
+*.secret
+secrets.*
+
+# Logs & Cache
+logs/
+*.log
+.cache/
+
+# OS generated files (Windows / macOS)
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+
+# IDE / Code Editor
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

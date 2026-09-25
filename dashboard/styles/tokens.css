@@ -1,0 +1,120 @@
+/* ==========================================================================
+   Design Tokens — Dark & Light Themes (WCAG 2.1 AA Compliant)
+   ========================================================================== */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #070b16;
+  --color-surface: #0e1526;
+  --color-surface-raised: #16203a;
+  --color-border: #222e4a;
+  --color-border-strong: #6a7896;
+  --color-overlay: rgb(3 6 14 / 0.72);
+
+  --color-text: #f1f4fb;
+  --color-text-muted: #a3b0c8;
+
+  --color-accent: #00AC47;
+  --color-accent-hover: #14be5b;
+  --color-on-accent: #ffffff;
+  --color-accent-text: #2ee575;
+  --color-accent-soft: rgba(0, 172, 71, 0.16);
+
+  --color-success-text: #4ade80;
+  --color-success-border: #2f8f62;
+  --color-danger-text: #ff8f8f;
+  --color-danger-soft: #341619;
+  --color-danger-border: #c25a5a;
+
+  --color-focus: #8ab4ff;
+  --color-tooltip-bg: #1e293b;
+  --color-tooltip-text: #f8fafc;
+  --color-glow-a: rgb(60 105 235 / 0.22);
+  --color-glow-b: rgb(0 172 71 / 0.14);
+  --shadow-overlay: 0 24px 48px rgb(0 0 0 / 0.5);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-raised: #edf0f7;
+  --color-border: #dde3ef;
+  --color-border-strong: #6b7891;
+  --color-overlay: rgb(15 23 42 / 0.55);
+
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+
+  --color-accent: #00AC47;
+  --color-accent-hover: #00963e;
+  --color-on-accent: #ffffff;
+  --color-accent-text: #007530;
+  --color-accent-soft: #e8f8ef;
+
+  --color-success-text: #15803d;
+  --color-success-border: #1f8a57;
+  --color-danger-text: #b91c1c;
+  --color-danger-soft: #fdeaea;
+  --color-danger-border: #d14343;
+
+  --color-focus: #1d4ed8;
+  --color-tooltip-bg: #0f172a;
+  --color-tooltip-text: #f8fafc;
+  --color-glow-a: rgb(59 110 240 / 0.12);
+  --color-glow-b: rgb(0 172 71 / 0.10);
+  --shadow-overlay: 0 24px 48px rgb(15 23 42 / 0.2);
+}
+
+:root {
+  /* Typography */
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: clamp(1.625rem, 1.2rem + 1.5vw, 2.25rem);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --hairline: 1px;
+
+  /* Radius & Motion */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+  --duration-fast: 120ms;
+  --focus-ring: 2px solid var(--color-focus);
+
+  /* Icon sizes */
+  --icon-xs: 0.875rem;
+  --icon-sm: 1rem;
+  --icon-md: 1.25rem;
+  --icon-lg: 1.5rem;
+  --icon-xl: 2rem;
+
+  /* Layout dimensions */
+  --header-h: 3.5rem;
+  --sidebar-w: 24rem;
+  --content-max: 64rem;
+  --target-size: 2.25rem;
+}
