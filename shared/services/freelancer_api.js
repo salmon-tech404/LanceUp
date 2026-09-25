@@ -32,7 +32,7 @@ export async function fetchProjects(coreSkillIds = []) {
     const params = new URLSearchParams();
     params.set('job_details', 'true');
     params.set('full_description', 'true');
-    params.set('limit', '50');
+    params.set('limit', '100');
 
     for (const skillId of coreSkillIds) {
       params.append('jobs[]', String(skillId));

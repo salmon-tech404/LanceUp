@@ -10,11 +10,13 @@ import { readFilters, writeFilters } from './store/filter_store.js';
 import { showExportModal } from './ui/export_dialog.js';
 import { fetchMultiPlatformJobs } from '../../shared/services/orchestrator.js';
 import { evaluateJob } from '../../shared/domain/evaluate.js';
-import { DEFAULTS } from '../../shared/config/constants.js';
+import { DEFAULTS, PLATFORMS } from '../../shared/config/constants.js';
 import { SKILL_GROUPS } from '../../shared/config/skills.js';
 import { icon } from '../../shared/utils/icons.js';
+import { escapeHtml } from '../../shared/utils/security.js';
 import { initTooltips } from './ui/tooltip_manager.js';
 import { showToast } from './ui/toast_manager.js';
+import { getUpworkTabStatus } from '../../shared/services/upwork_service.js';
 
 // Global state
 let personalStore = readStore();
@@ -43,10 +45,12 @@ let sidebarEl = null;
 
 // DOM references
 const jobsContainer = document.getElementById('jobsContainer');
+const statsEl = document.querySelector('.stats');
 const statTotal = document.getElementById('statTotal');
 const statPassed = document.getElementById('statPassed');
 const statDiscarded = document.getElementById('statDiscarded');
 const statAverage = document.getElementById('statAverage');
+const countAll = document.getElementById('countAll');
 const countSaved = document.getElementById('countSaved');
 const countHidden = document.getElementById('countHidden');
 const selectSort = document.getElementById('selectSort');
@@ -83,6 +87,8 @@ function updateStats() {
   if (statDiscarded) statDiscarded.textContent = discarded.length;
   if (statAverage) statAverage.textContent = passed.length > 0 ? `${avgScore}đ` : '—';
 
+  const visiblePassed = filters.showDiscarded ? total : passed.length;
+  if (countAll) countAll.textContent = visiblePassed > 0 ? `(${visiblePassed})` : '';
   if (countSaved) countSaved.textContent = savedCount > 0 ? `(${savedCount})` : '';
   if (countHidden) countHidden.textContent = hiddenCount > 0 ? `(${hiddenCount})` : '';
 }
@@ -100,6 +106,11 @@ function reEvaluateAndRender() {
  * Render jobs list based on active tab and options
  */
 function renderJobsFeed() {
+  // Only show the global scan stats bar on the "All" tab to prevent confusion on Saved/Hidden tabs
+  if (statsEl) {
+    statsEl.style.display = activeTab === 'all' ? 'grid' : 'none';
+  }
+
   renderJobsList(jobsContainer, evaluations, {
     personalStore,
     onStoreChange: (shouldRerender = true) => {
@@ -131,6 +142,92 @@ function setDiscardedVisibility(show) {
   }
   writeFilters(filters);
   renderJobsFeed();
+}
+
+/**
+ * Update top header notice for platforms requiring login session
+ * (Rendered in red, italic, unbolded as requested)
+ */
+function updateHeaderLoginNotice(selectedPlatforms = filters.platforms) {
+  const noticeEl = document.getElementById('headerLoginNotice');
+  if (!noticeEl) return;
+
+  const currentPlatforms = Array.isArray(selectedPlatforms) ? selectedPlatforms : [];
+  const loginRequiredPlatforms = currentPlatforms
+    .map(id => PLATFORMS[id])
+    .filter(p => p && p.requiresLogin);
+
+  if (loginRequiredPlatforms.length === 0) {
+    noticeEl.style.display = 'none';
+    noticeEl.innerHTML = '';
+    return;
+  }
+
+  const names = loginRequiredPlatforms.map(p => p.name).join(', ');
+  noticeEl.style.display = 'inline-flex';
+
+  if (loginRequiredPlatforms.length === 1 && loginRequiredPlatforms[0].id === 'upwork') {
+    noticeEl.innerHTML = `* Lưu ý: Bạn cần đăng nhập vào <a href="https://www.upwork.com/" target="_blank" rel="noopener noreferrer">Upwork</a> trên trình duyệt trước khi click Reload / Quét việc làm.`;
+  } else {
+    noticeEl.innerHTML = `* Lưu ý: Bạn cần đăng nhập vào ${escapeHtml(names)} trên trình duyệt trước khi click Reload / Quét việc làm.`;
+  }
+
+  const link = noticeEl.querySelector('a');
+  if (link) {
+    link.addEventListener('click', (e) => {
+      if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+        e.preventDefault();
+        chrome.tabs.create({ url: link.href });
+      }
+    });
+  }
+}
+
+/**
+ * Update Upwork Live Sync notice banner based on tab status
+ */
+async function updateUpworkNotice() {
+  const container = document.getElementById('feedNoticeContainer');
+  if (!container) return;
+
+  const isUpworkSelected = filters.platforms.includes('upwork');
+  if (!isUpworkSelected) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const { hasTab } = await getUpworkTabStatus();
+  if (hasTab) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="sync-banner" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); margin-bottom: var(--space-3);">
+      <div style="display: flex; align-items: center; gap: var(--space-2);">
+        ${icon('info', 'sm')}
+        <span style="font-size: var(--text-xs); color: var(--color-text); line-height: 1.4;">
+          <strong>Upwork đang hiển thị tin mẫu (Snapshot):</strong> Mở một tab tìm kiếm Upwork để LanceUp tự động quét việc làm thực tế theo thời gian thực.
+        </span>
+      </div>
+      <button type="button" class="btn btn--secondary btn--sm" id="btnOpenUpworkTab" style="flex-shrink: 0; white-space: nowrap;">
+        ${icon('external-link', 'xs')}
+        <span>Mở tab Upwork Search</span>
+      </button>
+    </div>
+  `;
+
+  const btn = document.getElementById('btnOpenUpworkTab');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const url = 'https://www.upwork.com/nx/search/jobs/';
+      if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+        chrome.tabs.create({ url });
+      } else {
+        window.open(url, '_blank');
+      }
+    });
+  }
 }
 
 /**
@@ -177,6 +274,7 @@ async function loadJobs() {
 
   try {
     reEvaluateAndRender();
+    updateUpworkNotice();
   } catch (err) {
     console.error('Failed to render jobs list:', err);
     renderEmptyState(jobsContainer, {
@@ -193,9 +291,10 @@ async function loadJobs() {
  * Initialize application UI and event listeners
  */
 function initApp() {
-  // 1. Theme toggle & global tooltips
+  // 1. Theme toggle, global tooltips, and header login notice
   initTheme(themeToggle);
   initTooltips();
+  updateHeaderLoginNotice(filters.platforms);
 
   // 2. Set control initial values
   if (selectSort) {
@@ -250,6 +349,7 @@ function initApp() {
 
         // Persist to storage
         writeFilters(filters);
+        updateHeaderLoginNotice(filters.platforms);
 
         // Update sidebar draft & controls
         if (sidebarEl && sidebarEl.setDraft) {
@@ -280,6 +380,9 @@ function initApp() {
   if (sidebarMount) {
     sidebarEl = createFilterSidebar({
       initialFilters: filters,
+      onPlatformChange: (newPlatforms) => {
+        updateHeaderLoginNotice(newPlatforms);
+      },
       onReload: async (newFilters) => {
         const newCoreSet = new Set(newFilters.core);
         const platformsChanged = JSON.stringify(filters.platforms.slice().sort()) !== JSON.stringify(newFilters.platforms.slice().sort());
@@ -297,6 +400,7 @@ function initApp() {
 
         // Persist
         writeFilters(filters);
+        updateHeaderLoginNotice(filters.platforms);
 
         // Close mobile sidebar if open
         if (sidebarEl.classList.contains('is-open')) {
@@ -314,6 +418,7 @@ function initApp() {
         } else {
           // Pure re-filtering without network request
           reEvaluateAndRender();
+          updateUpworkNotice();
           showToast({ message: 'Đã cập nhật tiêu chí và lọc lại bảng tin!', tone: 'success' });
         }
       },

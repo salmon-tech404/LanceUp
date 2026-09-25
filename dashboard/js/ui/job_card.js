@@ -58,6 +58,12 @@ export function renderJobCard(evaluation, isStarred, isHidden, isViewed) {
             <span>${badgeLabel}</span>
           </span>
 
+          ${job.isSnapshot ? `
+            <span class="badge badge--snapshot" title="Dữ liệu mẫu demo. Mở tab Upwork để quét việc làm thực tế.">
+              ${icon('info', 'xs')}
+              <span>Bản chụp mẫu (Snapshot)</span>
+            </span>
+          ` : ''}
 
           <div class="status ${isPassed ? 'status--success' : 'status--danger'}">
             ${icon(isPassed ? 'circle-check' : 'circle-x', 'xs')}

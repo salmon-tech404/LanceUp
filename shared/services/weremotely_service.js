@@ -80,7 +80,7 @@ function stripHtml(html) {
   return html.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
 }
 
-export async function fetchWeRemotelyJobs(limit = 40) {
+export async function fetchWeRemotelyJobs(limit = 100) {
   const url = 'https://weworkremotely.com/categories/remote-programming-jobs.rss';
 
   try {

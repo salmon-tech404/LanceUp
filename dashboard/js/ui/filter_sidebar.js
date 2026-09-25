@@ -7,7 +7,7 @@ import { icon } from '../../../shared/utils/icons.js';
 import { escapeHtml } from '../../../shared/utils/security.js';
 import { PLATFORMS, ALL_PLATFORM_IDS } from '../../../shared/config/constants.js';
 
-export function createFilterSidebar({ initialFilters, onReload }) {
+export function createFilterSidebar({ initialFilters, onReload, onPlatformChange = () => {} }) {
   // Staging draft state so user clicks don't lag or trigger network reloads until Reload is clicked
   const draft = {
     platforms: [...(initialFilters.platforms || ['freelancer', 'upwork', 'weremotely'])],
@@ -464,6 +464,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             }
           }
           updatePlatformTrigger();
+          onPlatformChange([...draft.platforms]);
         });
       });
     }
@@ -506,6 +507,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
         draft.platforms = [...ALL_PLATFORM_IDS];
         renderPlatformDropdownItems();
         updatePlatformTrigger();
+        onPlatformChange([...draft.platforms]);
       });
     }
 
@@ -515,6 +517,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
         draft.platforms = ['freelancer'];
         renderPlatformDropdownItems();
         updatePlatformTrigger();
+        onPlatformChange([...draft.platforms]);
       });
     }
 

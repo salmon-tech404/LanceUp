@@ -27,6 +27,7 @@ export const PLATFORMS = {
     badgeClass: 'platform-badge--upwork',
     icon: 'globe',
     typeTag: 'Session Tab',
+    requiresLogin: true,
     description: 'Cào dữ liệu từ phiên đăng nhập Upwork',
   },
   weremotely: {

@@ -55,7 +55,7 @@ export class JobicyAdapter extends JobSourceAdapter {
 
   async fetchJobs(_options = {}) {
     try {
-      const fetchPromise = fetch('https://jobicy.com/api/v2/remote-jobs?count=50', {
+      const fetchPromise = fetch('https://jobicy.com/api/v2/remote-jobs?count=100', {
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
@@ -72,7 +72,7 @@ export class JobicyAdapter extends JobSourceAdapter {
         throw new Error('Jobicy unexpected payload structure');
       }
 
-      const normalizedJobs = data.jobs.slice(0, 50).map(item => {
+      const normalizedJobs = data.jobs.slice(0, 100).map(item => {
         const title = item.jobTitle || 'Remote Engineering Job';
         const rawDesc = String(item.jobExcerpt || item.jobDescription || '')
           .replace(/<[^>]*>?/gm, ' ')

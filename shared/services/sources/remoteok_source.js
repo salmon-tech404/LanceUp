@@ -94,7 +94,7 @@ export class RemoteOKAdapter extends JobSourceAdapter {
       // First item is legal metadata; subsequent items are jobs
       const rawJobs = data.filter(item => item && !item.legal && (item.position || item.title));
 
-      const normalizedJobs = rawJobs.slice(0, 60).map(item => {
+      const normalizedJobs = rawJobs.slice(0, 100).map(item => {
         const title = item.position || item.title || 'Remote Opportunity';
         const tags = Array.isArray(item.tags) ? item.tags.join(' ') : '';
         const rawDesc = String(item.description || '').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();

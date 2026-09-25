@@ -67,6 +67,9 @@
         <h1 class="brand__name">LanceUp</h1>
       </div>
 
+      <!-- Header Login Requirement Notice -->
+      <div id="headerLoginNotice" class="header-login-notice" style="display: none;"></div>
+
       <div class="topbar__actions">
         <button type="button" class="btn btn--secondary" id="btnScanNow" title="Quét lại việc làm từ các sàn đã chọn">
           <svg class="icon icon--sm" aria-hidden="true"><use href="#i-refresh-cw"/></svg>
@@ -100,6 +103,9 @@
         <h2 class="title">Freelance <span class="title__accent">Jobs</span></h2>
         <p class="caption">Lọc & quét từ 12 sàn toàn cầu • Chấm điểm 0-100 • Kết quả thực thời</p>
       </div>
+
+      <!-- Feed Notice Banner Mount Target -->
+      <div id="feedNoticeContainer"></div>
 
       <!-- Stats Bar (4 columns) -->
       <dl class="stats">
@@ -140,7 +146,8 @@
       <div class="toolbar">
         <div class="segmented" role="tablist" aria-label="Bộ lọc chế độ xem">
           <button type="button" class="segmented__btn is-active" data-scope="all" role="tab" aria-selected="true">
-            Tất cả
+            <span>Tất cả</span>
+            <span id="countAll" style="margin-left: 0.25rem; font-size: var(--text-xs); opacity: 0.85;"></span>
           </button>
           <button type="button" class="segmented__btn" data-scope="saved" role="tab" aria-selected="false">
             <svg class="icon icon--xs" aria-hidden="true"><use href="#i-star"/></svg>
