@@ -57,7 +57,11 @@ export function renderEmptyState(container, { type = 'empty-filter', title, mess
   let defaultTitle = 'Không tìm thấy việc làm phù hợp';
   let defaultMsg = 'Không có job nào vượt qua các tiêu chí lọc hiện tại. Thử nới lỏng ngân sách hoặc bổ sung thêm kỹ năng.';
 
-  if (type === 'saved') {
+  if (type === 'ready') {
+    iconName = 'radar';
+    defaultTitle = 'Sẵn sàng tìm kiếm việc làm';
+    defaultMsg = 'Tùy chỉnh sàn tuyển dụng và kỹ năng ở thanh bên, sau đó nhấn nút để bắt đầu tìm kiếm việc làm mới nhất.';
+  } else if (type === 'saved') {
     iconName = 'star';
     defaultTitle = 'Chưa có job nào được lưu';
     defaultMsg = 'Nhấn vào nút "Lưu job" trên bất kỳ thẻ công việc nào để lưu lại danh sách cần ứng tuyển.';
@@ -83,7 +87,7 @@ export function renderEmptyState(container, { type = 'empty-filter', title, mess
     <div class="state__desc">${message || defaultMsg}</div>
     ${actionText ? `
       <div class="state__actions">
-        <button type="button" class="btn btn--secondary" id="emptyActionBtn">${actionText}</button>
+        <button type="button" class="btn ${type === 'ready' ? 'btn--primary' : 'btn--secondary'}" id="emptyActionBtn">${actionText}</button>
       </div>
     ` : ''}
   `;

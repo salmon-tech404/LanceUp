@@ -4,7 +4,7 @@
  */
 import { JobSourceAdapter } from './base_source.js';
 import { extractSkillsFromText } from '../weremotely_service.js';
-import { withTimeout } from '../../utils/security.js';
+import { withTimeout, stripAndCleanHtml } from '../../utils/security.js';
 
 export const JOBICY_SNAPSHOT = [
   {
@@ -74,10 +74,7 @@ export class JobicyAdapter extends JobSourceAdapter {
 
       const normalizedJobs = data.jobs.slice(0, 100).map(item => {
         const title = item.jobTitle || 'Remote Engineering Job';
-        const rawDesc = String(item.jobExcerpt || item.jobDescription || '')
-          .replace(/<[^>]*>?/gm, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
+        const rawDesc = stripAndCleanHtml(item.jobExcerpt || item.jobDescription || '');
         const industries = Array.isArray(item.jobIndustry) ? item.jobIndustry.join(' ') : String(item.jobIndustry || '');
         const textToSearch = `${title} ${industries} ${rawDesc.slice(0, 400)}`;
         const skills = extractSkillsFromText(textToSearch);

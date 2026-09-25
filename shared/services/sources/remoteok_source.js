@@ -4,7 +4,7 @@
  */
 import { JobSourceAdapter } from './base_source.js';
 import { extractSkillsFromText } from '../weremotely_service.js';
-import { withTimeout } from '../../utils/security.js';
+import { withTimeout, stripAndCleanHtml } from '../../utils/security.js';
 
 export const REMOTEOK_SNAPSHOT = [
   {
@@ -97,7 +97,7 @@ export class RemoteOKAdapter extends JobSourceAdapter {
       const normalizedJobs = rawJobs.slice(0, 100).map(item => {
         const title = item.position || item.title || 'Remote Opportunity';
         const tags = Array.isArray(item.tags) ? item.tags.join(' ') : '';
-        const rawDesc = String(item.description || '').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+        const rawDesc = stripAndCleanHtml(item.description);
         const textToSearch = `${title} ${tags} ${rawDesc.slice(0, 400)}`;
         const skills = extractSkillsFromText(textToSearch);
 

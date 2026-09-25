@@ -1,7 +1,7 @@
 /**
  * Unit Tests for We Work Remotely Service (Parser & Skill Extractor)
  */
-import { extractSkillsFromText, parseWWRBudget } from '../shared/services/weremotely_service.js';
+import { extractSkillsFromText, parseWWRBudget, cleanWWRDescription } from '../shared/services/weremotely_service.js';
 import { test, assertEqual, assertTrue } from './run_tests.js';
 
 export function runWeRemotelyTests() {
@@ -52,5 +52,14 @@ export function runWeRemotelyTests() {
     const budget = parseWWRBudget(text);
     assertEqual(budget.budgetMin, 0);
     assertEqual(budget.budgetMax, 0);
+  });
+
+  test('cleanWWRDescription strips metadata headers and decodes html entities like &nbsp;', () => {
+    const raw = '<p><strong>Headquarters:</strong> Princeton, New Jersey, United States</p><p><strong>URL:</strong> https://www.click2apply.net/WAQm2XC7Qr2yLU5m7H7yeG</p><p><strong>Job Type:</strong>&nbsp;Full-Time</p><p><strong>Overview</strong></p><p>Princeton University Office of IT is seeking a Senior Developer.</p>';
+    const cleaned = cleanWWRDescription(raw);
+    assertTrue(!cleaned.includes('Headquarters:'), 'Should not contain Headquarters');
+    assertTrue(!cleaned.includes('click2apply.net'), 'Should not contain apply URL');
+    assertTrue(!cleaned.includes('&nbsp;'), 'Should decode &nbsp;');
+    assertTrue(cleaned.includes('Princeton University Office of IT is seeking a Senior Developer.'), 'Should contain clean description body');
   });
 }

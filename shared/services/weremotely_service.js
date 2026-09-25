@@ -75,9 +75,37 @@ export function parseWWRBudget(text) {
   return { budgetMin: 0, budgetMax: 0, type: 'fixed', currency: 'USD' };
 }
 
-function stripHtml(html) {
-  if (!html) return '';
-  return html.replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim();
+export function cleanWWRDescription(rawHtml) {
+  if (!rawHtml) return '';
+
+  // 1. Decode HTML entities (&nbsp;, &amp;, &quot;, &#39;, &lt;, &gt;)
+  let text = String(rawHtml)
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(dec));
+
+  // 2. Remove WWR RSS metadata blocks from HTML markup
+  text = text.replace(/<p>\s*<strong>Headquarters:<\/strong>[^<]*<\/p>/gi, ' ');
+  text = text.replace(/<p>\s*<strong>URL:<\/strong>[^<]*<\/p>/gi, ' ');
+  text = text.replace(/<p>\s*<strong>Job Type:<\/strong>[^<]*<\/p>/gi, ' ');
+  text = text.replace(/<p>\s*<strong>Overview<\/strong><\/p>/gi, ' ');
+
+  // 3. Strip remaining HTML tags
+  let clean = text.replace(/<[^>]*>?/gm, ' ');
+
+  // 4. Strip leftover metadata headers if already in plain text form
+  clean = clean
+    .replace(/\bHeadquarters:\s*[^]*?\bURL:\s*https?:\/\/\S+/gi, '')
+    .replace(/\bHeadquarters:\s*[^.,;]+(?:,\s*[^.,;]+)*/gi, '')
+    .replace(/\bURL:\s*https?:\/\/\S+/gi, '')
+    .replace(/\bJob Type:\s*(?:Full-Time|Part-Time|Contract|Freelance)/gi, '')
+    .replace(/\bOverview\b/gi, '');
+
+  return clean.replace(/\s+/g, ' ').trim();
 }
 
 export async function fetchWeRemotelyJobs(limit = 100) {
@@ -102,7 +130,7 @@ export async function fetchWeRemotelyJobs(limit = 100) {
       const rawDesc = item.querySelector('description')?.textContent?.trim() || '';
       const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
 
-      const plainDesc = stripHtml(rawDesc);
+      const plainDesc = cleanWWRDescription(rawDesc);
       const combinedText = `${title} ${plainDesc}`;
 
       const skills = extractSkillsFromText(combinedText);

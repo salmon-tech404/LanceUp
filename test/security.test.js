@@ -1,11 +1,16 @@
 import { test, assertEqual, assertTrue } from './run_tests.js';
-import { escapeHtml, withTimeout, validateSender } from '../shared/utils/security.js';
+import { escapeHtml, stripAndCleanHtml, withTimeout, validateSender } from '../shared/utils/security.js';
 
 export async function runSecurityTests() {
   test('escapeHtml neutralizes dangerous characters against XSS', () => {
     const raw = '<script>alert("xss & hack")</script>';
     const escaped = escapeHtml(raw);
     assertEqual(escaped, '&lt;script&gt;alert(&quot;xss &amp; hack&quot;)&lt;/script&gt;');
+  });
+
+  test('stripAndCleanHtml removes tags and decodes entities like &nbsp;', () => {
+    const input = '<p>Job Type:&nbsp;Full-Time &amp; Remote</p>';
+    assertEqual(stripAndCleanHtml(input), 'Job Type: Full-Time & Remote');
   });
 
   test('escapeHtml handles quotes and special characters safely', () => {

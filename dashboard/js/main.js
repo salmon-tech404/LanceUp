@@ -49,6 +49,7 @@ let visibleLimit = 25;
 let cachedJobs = [];
 let evaluations = [];
 let isScanning = false;
+let hasScanned = false;
 let sidebarEl = null;
 
 // DOM references
@@ -73,6 +74,24 @@ const btnMobileFilterToggle = document.getElementById('btnMobileFilterToggle');
  * Update stats bar & segmented tab badges
  */
 function updateStats() {
+  const isStarred = (id) => personalStore.starred.has(id) || personalStore.starred.has(Number(id)) || personalStore.starred.has(String(id));
+  const isHidden = (id) => personalStore.hidden.has(id) || personalStore.hidden.has(Number(id)) || personalStore.hidden.has(String(id));
+
+  const savedCount = evaluations.filter(e => isStarred(e.job.id)).length;
+  const hiddenCount = evaluations.filter(e => isHidden(e.job.id)).length;
+
+  if (countSaved) countSaved.textContent = savedCount > 0 ? `(${savedCount})` : '';
+  if (countHidden) countHidden.textContent = hiddenCount > 0 ? `(${hiddenCount})` : '';
+
+  if (!hasScanned) {
+    if (statTotal) statTotal.textContent = '0';
+    if (statPassed) statPassed.textContent = '0';
+    if (statDiscarded) statDiscarded.textContent = '0';
+    if (statAverage) statAverage.textContent = '—';
+    if (countAll) countAll.textContent = '';
+    return;
+  }
+
   const total = evaluations.length;
   const passed = evaluations.filter(e => e.status === 'passed');
   const discarded = evaluations.filter(e => e.status === 'discarded');
@@ -83,13 +102,6 @@ function updateStats() {
     avgScore = Math.round(sum / passed.length);
   }
 
-  // Count saved & hidden from current evaluations
-  const isStarred = (id) => personalStore.starred.has(id) || personalStore.starred.has(Number(id)) || personalStore.starred.has(String(id));
-  const isHidden = (id) => personalStore.hidden.has(id) || personalStore.hidden.has(Number(id)) || personalStore.hidden.has(String(id));
-
-  const savedCount = evaluations.filter(e => isStarred(e.job.id)).length;
-  const hiddenCount = evaluations.filter(e => isHidden(e.job.id)).length;
-
   if (statTotal) statTotal.textContent = total;
   if (statPassed) statPassed.textContent = passed.length;
   if (statDiscarded) statDiscarded.textContent = discarded.length;
@@ -97,8 +109,6 @@ function updateStats() {
 
   const visiblePassed = filters.showDiscarded ? total : passed.length;
   if (countAll) countAll.textContent = visiblePassed > 0 ? `(${visiblePassed})` : '';
-  if (countSaved) countSaved.textContent = savedCount > 0 ? `(${savedCount})` : '';
-  if (countHidden) countHidden.textContent = hiddenCount > 0 ? `(${hiddenCount})` : '';
 }
 
 /**
@@ -114,6 +124,20 @@ function reEvaluateAndRender() {
  * Render jobs list based on active tab and options
  */
 function renderJobsFeed() {
+  if (activeTab === 'all' && !hasScanned) {
+    if (statsEl) {
+      statsEl.style.display = 'none';
+    }
+    renderEmptyState(jobsContainer, {
+      type: 'ready',
+      title: 'Sẵn sàng tìm kiếm việc làm',
+      message: 'Tùy chỉnh sàn tuyển dụng và kỹ năng ở thanh bên, sau đó nhấn nút để bắt đầu tìm kiếm việc làm mới nhất.',
+      actionText: 'Quét việc làm ngay',
+      onAction: () => loadJobs(),
+    });
+    return;
+  }
+
   // Only show the global scan stats bar on the "All" tab to prevent confusion on Saved/Hidden tabs
   if (statsEl) {
     statsEl.style.display = activeTab === 'all' ? 'grid' : 'none';
@@ -257,6 +281,7 @@ async function updateUpworkNotice() {
 async function loadJobs() {
   if (isScanning) return;
   isScanning = true;
+  hasScanned = true;
 
   if (btnScanNow) {
     btnScanNow.disabled = true;
@@ -446,8 +471,8 @@ function initApp() {
           chkShowDiscarded.checked = filters.showDiscarded;
         }
 
-        // If platform selection or core skills changed, re-fetch from platforms
-        if (platformsChanged || coreChanged) {
+        // If platform selection or core skills changed, or haven't scanned yet, fetch from platforms
+        if (platformsChanged || coreChanged || !hasScanned) {
           await loadJobs();
         } else {
           // Pure re-filtering without network request
@@ -468,28 +493,23 @@ function initApp() {
     }
   }
 
-  // 7. Instant Load from IndexedDB (Offline-first), followed by fresh network scan
+  // 7. Load Saved Jobs from IndexedDB and present initial ready state (user triggers scan manually)
   (async () => {
     try {
-      const cachedIDBJobs = await getAllJobs(300);
       const starredIDBJobs = await getAllStarredJobs();
       starredIDBJobs.forEach(j => {
         if (j && j.id) personalStore.starred.add(j.id);
       });
 
-      const mergedMap = new Map();
-      cachedIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
-      starredIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
-
-      if (mergedMap.size > 0 && cachedJobs.length === 0) {
-        cachedJobs = Array.from(mergedMap.values());
-        reEvaluateAndRender();
-      }
+      // Pre-load starred jobs into cache so switching to "Đã lưu" tab works immediately
+      cachedJobs = starredIDBJobs;
+      evaluations = cachedJobs.map(job => evaluateJob(job, filters));
+      updateStats();
     } catch (idbErr) {
       console.info('[LanceUp] Khởi tạo bộ đệm IndexedDB:', idbErr);
     }
 
-    loadJobs();
+    renderJobsFeed();
   })();
 }
 
