@@ -17,49 +17,46 @@ export const TOOLTIPS = {
         </div>
         
         <div class="tip-card__block">
-          <div class="tip-card__label">🎯 Con số này (ví dụ 60) là gì?</div>
+          <div class="tip-card__label">Ý nghĩa của con số này (ví dụ: 60)</div>
           <div class="tip-card__desc">
-            Đây là <strong>điểm sàn chất lượng tối thiểu</strong> bạn đặt ra. Bất kỳ công việc nào có điểm tổng kết 
-            <strong style="color: var(--color-success-text);">&ge; 60đ</strong> sẽ được đưa vào danh sách 
-            <strong>"Đạt yêu cầu"</strong>. Công việc <strong style="color: var(--color-danger-text);">&lt; 60đ</strong> 
-            sẽ tự động bị <strong>"Loại bỏ"</strong> và ẩn đi để bạn không tốn thời gian đọc.
+            Đây là điểm sàn chất lượng tối thiểu bạn đặt ra. Công việc đạt từ 60 điểm trở lên được xếp vào danh sách Đạt yêu cầu. Công việc dưới 60 điểm sẽ tự động chuyển sang mục Loại bỏ để bạn không mất thời gian xem.
           </div>
         </div>
 
         <div class="tip-card__block">
-          <div class="tip-card__label">📊 Điểm 100 từ đâu ra? Cách tính:</div>
+          <div class="tip-card__label">Cách tính điểm (Thang 100)</div>
           <div class="tip-card__formula">
             <div class="tip-card__formula-row">
-              <span class="tip-tag tip-tag--budget">1. Thù lao (tối đa 40đ)</span>
-              <span>Ngân sách càng cao điểm càng nhiều: Job &ge; $2,500 hoặc &ge; $60/h: <strong>40đ</strong>; &ge; $750 hoặc &ge; $35/h: <strong>30đ</strong>; &ge; $250 hoặc &ge; $20/h: <strong>20đ</strong>.</span>
+              <span class="tip-tag tip-tag--budget">Thù lao (tối đa 40đ)</span>
+              <span>Dự án cố định từ $2,500 hoặc từ $60/h nhận 40đ; từ $750 hoặc từ $35/h nhận 30đ; từ $250 hoặc từ $20/h nhận 20đ.</span>
             </div>
             <div class="tip-card__formula-row">
-              <span class="tip-tag tip-tag--tech">2. Kỹ năng (tối đa 40đ)</span>
-              <span>Khớp từ 2 kỹ năng yêu cầu (Core): <strong>30đ</strong> (1 kỹ năng: <strong>20đ</strong>) + Mỗi kỹ năng phụ (Support) cộng thêm: <strong>+10đ</strong> (tối đa 20đ).</span>
+              <span class="tip-tag tip-tag--tech">Kỹ năng (tối đa 40đ)</span>
+              <span>Khớp từ 2 kỹ năng chính nhận 30đ (khớp 1 kỹ năng nhận 20đ), mỗi kỹ năng phụ cộng thêm 10đ.</span>
             </div>
             <div class="tip-card__formula-row">
-              <span class="tip-tag tip-tag--bids">3. Cạnh tranh (tối đa 20đ)</span>
-              <span>Số lượng chào thầu &le; mức "Bid ít" của bạn: nhận trọn <strong>20đ</strong> (ít đối thủ cạnh tranh, xác suất chốt hợp đồng cao nhất).</span>
+              <span class="tip-tag tip-tag--bids">Cạnh tranh (tối đa 20đ)</span>
+              <span>Số lượng chào thầu bằng hoặc thấp hơn mức ít đối thủ sẽ nhận đủ 20đ.</span>
             </div>
           </div>
         </div>
 
         <div class="tip-card__block tip-card__block--guide">
-          <div class="tip-card__label">💡 Khi nào nên NÂNG hoặc HẠ điểm này?</div>
+          <div class="tip-card__label">Hướng dẫn điều chỉnh</div>
           <div class="tip-card__guide-list">
             <div class="tip-card__guide-item">
-              <span class="tip-dir tip-dir--up">⬆️ NÂNG LÊN (70 - 85đ) — Khi muốn săn "kèo thơm / job VIP":</span>
-              <span>Bộ lọc sẽ siết rất chặt, chỉ giữ lại các việc ngân sách khủng, rất ít đối thủ và trúng tủ 100% kỹ năng. Số lượng job hiển thị sẽ ít đi nhưng đáng giá từng job.</span>
+              <span class="tip-dir tip-dir--up">Nâng lên (70 - 85đ) - Khi muốn chọn lọc kỹ:</span>
+              <span>Bộ lọc siết chặt, chỉ giữ lại các việc ngân sách lớn, ít đối thủ và trúng tủ kỹ năng.</span>
             </div>
             <div class="tip-card__guide-item">
-              <span class="tip-dir tip-dir--down">⬇️ HẠ XUỐNG (30 - 50đ) — Khi muốn nhận nhiều việc hơn:</span>
-              <span>Nới lỏng tiêu chuẩn để không bỏ sót cơ hội. Chấp nhận các dự án nhỏ hơn, nhiều người nộp hơn hoặc chỉ cần khớp 1 kỹ năng để team luôn có việc làm liên tục.</span>
+              <span class="tip-dir tip-dir--down">Hạ xuống (30 - 50đ) - Khi muốn nhận nhiều việc:</span>
+              <span>Tiêu chí nới lỏng để không bỏ sót cơ hội, phù hợp khi muốn mở rộng danh sách công việc.</span>
             </div>
           </div>
         </div>
 
         <div class="tip-card__footer">
-          <span>💡 Rê chuột để xem nhanh • Click vào icon (?) để ghim mở • Bấm Esc để đóng</span>
+          <span>Rê chuột để xem nhanh • Click vào biểu tượng để ghim mở • Bấm Esc để đóng</span>
         </div>
       </div>
     `,
@@ -74,13 +71,13 @@ export const TOOLTIPS = {
           <span class="tip-card__badge">Fixed Budget</span>
         </div>
         <div class="tip-card__desc">
-          Mức thù lao dự án tối thiểu theo USD ($) cho cả dự án Fixed. Mọi công việc Fixed có ngân sách thấp hơn con số này sẽ tự động bị <strong>Loại bỏ</strong>.
+          Mức thù lao dự án tối thiểu tính theo USD cho dự án cố định. Những việc có ngân sách thấp hơn con số này sẽ tự động bị loại.
         </div>
         <div class="tip-card__block tip-card__block--guide">
-          <div class="tip-card__label">💡 Hướng dẫn điều chỉnh:</div>
+          <div class="tip-card__label">Hướng dẫn điều chỉnh</div>
           <div class="tip-card__desc">
-            • <strong>Nâng lên (300$ - 1,000$):</strong> Bỏ qua các job nhỏ lẻ, tốn thời gian trao đổi.<br>
-            • <strong>Hạ xuống (50$ - 150$):</strong> Nhận thêm các dự án task ngắn hạn, giải quyết nhanh kiếm đánh giá tốt.
+            • Nâng lên ($300 - $1,000): Bỏ qua các job nhỏ lẻ, tốn thời gian trao đổi.<br>
+            • Hạ xuống ($50 - $150): Nhận thêm dự án ngắn hạn, hoàn thành nhanh.
           </div>
         </div>
       </div>
@@ -96,37 +93,54 @@ export const TOOLTIPS = {
           <span class="tip-card__badge">Hourly Rate</span>
         </div>
         <div class="tip-card__desc">
-          Mức thù lao trả theo giờ tối thiểu theo USD ($/giờ). Mọi công việc Hourly có đơn giá thấp hơn con số này sẽ tự động bị <strong>Loại bỏ</strong>.
+          Mức thù lao trả theo giờ tối thiểu tính theo USD/giờ. Công việc có đơn giá thấp hơn mức này sẽ bị loại.
         </div>
         <div class="tip-card__block tip-card__block--guide">
-          <div class="tip-card__label">💡 Hướng dẫn điều chỉnh:</div>
+          <div class="tip-card__label">Hướng dẫn điều chỉnh</div>
           <div class="tip-card__desc">
-            Đặt theo mức rate tối thiểu mà team hoặc cá nhân bạn sẵn sàng làm việc (ví dụ 20$/h - 45$/h).
+            Đặt theo mức rate tối thiểu mà bạn sẵn sàng nhận (ví dụ $20/h - $45/h).
           </div>
         </div>
       </div>
     `,
   },
   'few-bids': {
-    title: 'Mức trần chào thầu "Bid ít" (người)',
-    badge: 'Độ cạnh tranh',
+    title: 'Mốc ít đối thủ cạnh tranh (Số người nộp)',
+    badge: 'Độ cạnh tranh (Tối đa +20đ)',
     html: `
       <div class="tip-card">
         <div class="tip-card__header">
-          <span class="tip-card__title">Mức trần chào thầu "Bid ít" (người)</span>
-          <span class="tip-card__badge">Độ cạnh tranh</span>
+          <span class="tip-card__title">Mốc ít đối thủ cạnh tranh (Bids)</span>
+          <span class="tip-card__badge">Tối đa +20đ</span>
         </div>
-        <div class="tip-card__desc">
-          Số lượng nộp hồ sơ/proposals tối đa để nhận trọn <strong>20 điểm cạnh tranh</strong>.
-        </div>
+        
         <div class="tip-card__block">
+          <div class="tip-card__label">Ý nghĩa của con số này</div>
           <div class="tip-card__desc">
-            • Job có <strong>&le; số này</strong> (ví dụ &le; 20 bids): Nhận trọn <strong>20đ</strong> (dễ chốt hợp đồng).<br>
-            • Job có <strong>nhiều hơn số này</strong>: Bị trừ điểm cạnh tranh dần về 0đ do đối thủ quá đông.
+            Khi nộp hồ sơ vào công việc ít người nộp, khách hàng sẽ thấy bạn sớm hơn và cơ hội được chọn cao hơn. Đây là số người nộp tối đa để công việc được cộng đủ 20 điểm ưu tiên.
           </div>
         </div>
+
+        <div class="tip-card__block">
+          <div class="tip-card__label">Ví dụ cụ thể khi đặt mốc 20:</div>
+          <div class="tip-card__desc" style="display: flex; flex-direction: column; gap: var(--space-1); margin-top: 4px;">
+            <div>• Job có 8 người nộp (dưới 20): Ít đối thủ, cộng đủ 20 điểm.</div>
+            <div>• Job có 45 người nộp (trên 20): Bắt đầu đông đối thủ, giảm còn 10 điểm.</div>
+            <div>• Job có 80 người nộp: Quá nhiều người tham gia, giảm còn 5 điểm.</div>
+            <div>• Job trên 100 người nộp: Quá tải chào thầu, nhận 0 điểm cạnh tranh.</div>
+          </div>
+        </div>
+
+        <div class="tip-card__block tip-card__block--guide">
+          <div class="tip-card__label">Hướng dẫn điều chỉnh</div>
+          <div class="tip-card__desc">
+            • Đặt 15 - 25: Ưu tiên công việc mới đăng chưa bị nộp dồn dập.<br>
+            • Đặt 50 - 100: Nới lỏng tiêu chuẩn nếu muốn thấy nhiều công việc hơn.
+          </div>
+        </div>
+
         <div class="tip-card__footer">
-          <span>💡 Khuyên dùng: 15 - 25 bids để ưu tiên các job mới đăng chưa bị spam bid.</span>
+          <span>Rê chuột để xem nhanh • Click vào biểu tượng để ghim mở • Bấm Esc để đóng</span>
         </div>
       </div>
     `,
@@ -141,7 +155,7 @@ export const TOOLTIPS = {
           <span class="tip-card__badge">Multi-Source</span>
         </div>
         <div class="tip-card__desc">
-          Chọn các sàn việc làm muốn quét tự động: <strong>Freelancer.com, Upwork và We Work Remotely</strong>. Hệ thống sẽ chuẩn hóa dữ liệu về cùng một thang đo và bảng điểm 100 minh bạch.
+          Chọn các sàn việc làm muốn quét tự động: Freelancer.com, Upwork, We Work Remotely, RemoteOK, Jobicy. Hệ thống chuẩn hóa dữ liệu về cùng thang điểm 100 thống nhất.
         </div>
       </div>
     `,
@@ -156,8 +170,8 @@ export const TOOLTIPS = {
           <span class="tip-card__badge">Bắt buộc</span>
         </div>
         <div class="tip-card__desc">
-          <strong>Bắt buộc:</strong> Job phải có ít nhất 1 kỹ năng trong nhóm này. Nếu không có, job sẽ bị <strong>Loại bỏ</strong> ngay lập tức.<br>
-          Khớp 1 kỹ năng: <strong>+20đ</strong>. Khớp từ 2 kỹ năng trở lên: <strong>+30đ</strong>. Bỏ tick kỹ năng nào thì kỹ năng đó sẽ chuyển xuống "Kỹ năng khác".
+          Công việc phải có ít nhất một kỹ năng trong nhóm này. Nếu không có, công việc sẽ bị chuyển sang mục Loại bỏ.<br>
+          Khớp 1 kỹ năng: cộng 20đ. Khớp từ 2 kỹ năng: cộng 30đ. Bỏ chọn kỹ năng nào thì kỹ năng đó sẽ chuyển xuống Kỹ năng khác.
         </div>
       </div>
     `,
@@ -172,23 +186,23 @@ export const TOOLTIPS = {
           <span class="tip-card__badge">Cộng điểm</span>
         </div>
         <div class="tip-card__desc">
-          Không bắt buộc job phải có, nhưng nếu có sẽ được cộng thêm <strong>+10đ</strong> cho mỗi kỹ năng phụ (tối đa <strong>+20đ</strong>). Bỏ tick kỹ năng nào thì kỹ năng đó sẽ chuyển xuống "Kỹ năng khác".
+          Nhóm kỹ năng bổ trợ không bắt buộc. Mỗi kỹ năng phụ phù hợp được cộng thêm 10đ (tối đa 20đ). Bỏ chọn kỹ năng nào thì kỹ năng đó sẽ chuyển xuống Kỹ năng khác.
         </div>
       </div>
     `,
   },
   'skills-exclude': {
-    title: 'Kỹ năng khác / Loại trừ (Exclude)',
+    title: 'Kỹ năng loại trừ (Exclude)',
     badge: 'Loại bỏ',
     html: `
       <div class="tip-card">
         <div class="tip-card__header">
-          <span class="tip-card__title">Kỹ năng khác / Loại trừ (Exclude)</span>
+          <span class="tip-card__title">Kỹ năng loại trừ (Exclude)</span>
           <span class="tip-card__badge" style="background: var(--color-danger-soft); color: var(--color-danger-text); border-color: var(--color-danger-border);">Loại bỏ</span>
         </div>
         <div class="tip-card__desc">
-          Các kỹ năng bạn không nhận làm. Bất kỳ công việc nào chứa kỹ năng trong nhóm này sẽ bị <strong>Loại bỏ ngay lập tức</strong>.<br>
-          Click vào ô checkbox để hoàn tác kỹ năng trở lại nhóm trên.
+          Các kỹ năng bạn không nhận làm. Bất kỳ công việc nào chứa kỹ năng trong nhóm này sẽ bị loại ngay lập tức.<br>
+          Chọn lại vào ô checkbox để chuyển kỹ năng trở lại nhóm phía trên.
         </div>
       </div>
     `,

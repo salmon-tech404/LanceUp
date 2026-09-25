@@ -9,6 +9,7 @@ import { runSecurityTests } from './security.test.js';
 import { runConfigParserTests } from './config_parser.test.js';
 import { runWeRemotelyTests } from './weremotely.test.js';
 import { runSourcesTests } from './sources.test.js';
+import { runIDBTests } from './idb_store.test.js';
 
 let totalTests = 0;
 let passedTests = 0;
@@ -69,6 +70,9 @@ async function runAll() {
 
   console.log('\n\x1b[36m[7/7] Testing Multi-Platform Adapters & Orchestrator (sources/)...\x1b[0m');
   await runSourcesTests();
+
+  console.log('\n\x1b[36m[8/8] Testing Native IndexedDB Engine (idb_store.js)...\x1b[0m');
+  await runIDBTests();
 
   console.log('\n\x1b[1m--------------------------------------------------\x1b[0m');
   console.log(`Total: ${totalTests} | \x1b[32mPassed: ${passedTests}\x1b[0m | \x1b[31mFailed: ${failedTests}\x1b[0m`);

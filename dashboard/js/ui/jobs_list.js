@@ -203,11 +203,12 @@ export function renderJobsList(
       if (alreadyStarred) {
         setDeleteId(personalStore.starred, item.job.id);
         showToast('Đã bỏ lưu job khỏi danh sách');
+        onStoreChange(true, item.job.id, false);
       } else {
         personalStore.starred.add(item.job.id);
         showToast('Đã lưu job vào danh sách theo dõi');
+        onStoreChange(true, item.job.id, true);
       }
-      onStoreChange();
     } else if (action === 'hide') {
       const alreadyHidden = setContainsId(personalStore.hidden, item.job.id);
       if (alreadyHidden) {
@@ -217,7 +218,7 @@ export function renderJobsList(
         personalStore.hidden.add(item.job.id);
         showToast('Đã ẩn job khỏi bảng tin');
       }
-      onStoreChange();
+      onStoreChange(true, item.job.id, null);
     } else if (action === 'copy') {
       try {
         await navigator.clipboard.writeText(item.job.url);
@@ -228,7 +229,7 @@ export function renderJobsList(
     } else if (action === 'view') {
       personalStore.viewed.add(item.job.id);
       card.dataset.viewed = 'true';
-      onStoreChange(false); // Don't full re-render on click
+      onStoreChange(false, item.job.id, null); // Don't full re-render on click
     } else if (action === 'score-detail') {
       showScoreModal(item);
     }

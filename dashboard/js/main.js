@@ -17,6 +17,14 @@ import { escapeHtml } from '../../shared/utils/security.js';
 import { initTooltips } from './ui/tooltip_manager.js';
 import { showToast } from './ui/toast_manager.js';
 import { getUpworkTabStatus } from '../../shared/services/upwork_service.js';
+import {
+  saveJobs,
+  getAllJobs,
+  saveStarredJob,
+  removeStarredJob,
+  getAllStarredJobs,
+  syncPersonalStoreToIDB,
+} from './store/idb_store.js';
 
 // Global state
 let personalStore = readStore();
@@ -113,8 +121,21 @@ function renderJobsFeed() {
 
   renderJobsList(jobsContainer, evaluations, {
     personalStore,
-    onStoreChange: (shouldRerender = true) => {
+    onStoreChange: (shouldRerender = true, modifiedJobId = null, isStarred = null) => {
       writeStore(personalStore);
+      syncPersonalStoreToIDB(personalStore).catch(() => {});
+
+      if (modifiedJobId && isStarred !== null) {
+        if (isStarred) {
+          const jobToSave = cachedJobs.find(j => String(j.id) === String(modifiedJobId));
+          if (jobToSave) {
+            saveStarredJob(jobToSave).catch(err => console.warn('[LanceUp] Lưu job yêu thích:', err));
+          }
+        } else {
+          removeStarredJob(modifiedJobId).catch(err => console.warn('[LanceUp] Bỏ lưu job:', err));
+        }
+      }
+
       updateStats();
       if (shouldRerender && (activeTab === 'saved' || activeTab === 'hidden')) {
         renderJobsFeed();
@@ -250,7 +271,20 @@ async function loadJobs() {
   try {
     const coreSkillIds = [...filters.core];
     const result = await fetchMultiPlatformJobs(filters.platforms, coreSkillIds);
-    cachedJobs = result.jobs;
+    await saveJobs(result.jobs).catch(err => console.warn('[LanceUp] Lưu cache IndexedDB thất bại:', err));
+
+    // Merge fresh network jobs with existing cached jobs and starred jobs from IndexedDB
+    try {
+      const cachedIDBJobs = await getAllJobs(300);
+      const starredIDBJobs = await getAllStarredJobs();
+      const mergedMap = new Map();
+      cachedIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
+      starredIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
+      result.jobs.forEach(j => mergedMap.set(String(j.id), j));
+      cachedJobs = Array.from(mergedMap.values());
+    } catch {
+      cachedJobs = result.jobs;
+    }
   } catch (err) {
     console.error('Failed to load multi-platform jobs:', err);
     renderEmptyState(jobsContainer, {
@@ -434,8 +468,29 @@ function initApp() {
     }
   }
 
-  // 7. Initial scan
-  loadJobs();
+  // 7. Instant Load from IndexedDB (Offline-first), followed by fresh network scan
+  (async () => {
+    try {
+      const cachedIDBJobs = await getAllJobs(300);
+      const starredIDBJobs = await getAllStarredJobs();
+      starredIDBJobs.forEach(j => {
+        if (j && j.id) personalStore.starred.add(j.id);
+      });
+
+      const mergedMap = new Map();
+      cachedIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
+      starredIDBJobs.forEach(j => mergedMap.set(String(j.id), j));
+
+      if (mergedMap.size > 0 && cachedJobs.length === 0) {
+        cachedJobs = Array.from(mergedMap.values());
+        reEvaluateAndRender();
+      }
+    } catch (idbErr) {
+      console.info('[LanceUp] Khởi tạo bộ đệm IndexedDB:', idbErr);
+    }
+
+    loadJobs();
+  })();
 }
 
 // Start application when DOM is ready

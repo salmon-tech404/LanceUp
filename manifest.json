@@ -24,7 +24,8 @@
     "tabs",
     "storage",
     "cookies",
-    "scripting"
+    "scripting",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "https://*.freelancer.com/*",

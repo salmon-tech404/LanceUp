@@ -176,7 +176,7 @@ export function createFilterSidebar({ initialFilters, onReload, onPlatformChange
 
           <div>
             <label class="caption" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-              <span>Bid ít ≤ (n)</span>
+              <span>Ít đối thủ ≤ (bids)</span>
               <span class="tip-icon" data-tooltip-id="few-bids">${icon('circle-help', 'xs')}</span>
             </label>
             <input type="number" id="inputFewBids" value="${draft.fewBids}" min="1" max="500" class="input" />
