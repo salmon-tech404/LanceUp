@@ -17,6 +17,7 @@ export const JOBICY_SNAPSHOT = [
     budgetMax: 125000,
     currency: 'USD',
     type: 'fixed',
+    bids: 6,
     bidsCount: 6,
     skills: [
       { id: 759, name: 'React.js' },
@@ -36,6 +37,7 @@ export const JOBICY_SNAPSHOT = [
     budgetMax: 110000,
     currency: 'USD',
     type: 'fixed',
+    bids: 4,
     bidsCount: 4,
     skills: [
       { id: 500, name: 'Node.js' },
@@ -99,6 +101,7 @@ export class JobicyAdapter extends JobSourceAdapter {
           budgetMax: max,
           currency: item.salaryCurrency || 'USD',
           type: 'fixed',
+          bids: Math.floor(Math.random() * 5) + 3,
           bidsCount: Math.floor(Math.random() * 5) + 3,
           skills,
           submittedAt: timestamp,

@@ -21,7 +21,8 @@ export function scoreJob(job, maxUsd, matchedCore, matchedSupport, cfg) {
   const technology =
     (matchedCore.length >= 2 ? SCORING.techMultiCore : SCORING.techSingleCore) +
     (matchedSupport.length > 0 ? SCORING.techSupportBonus : 0);
-  const competition = competitionPoints(job.bids, cfg.fewBids);
+  const bids = typeof job.bids === 'number' ? job.bids : (typeof job.bidsCount === 'number' ? job.bidsCount : 0);
+  const competition = competitionPoints(bids, cfg.fewBids);
 
   return { budget, technology, competition };
 }

@@ -56,7 +56,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             ${icon('layers', 'sm', 'text-accent')}
             <span class="heading" style="font-size: var(--text-sm);">Sàn việc làm</span>
           </div>
-          <span class="tip-icon" title="Chọn các sàn việc làm và nguồn tuyển dụng muốn quét tự động">${icon('circle-help', 'xs')}</span>
+          <span class="tip-icon" data-tooltip-id="platforms">${icon('circle-help', 'xs')}</span>
         </div>
 
         <div class="platform-dropdown" id="platformDropdownWrap">
@@ -106,7 +106,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             <span id="coreCountBadge" class="caption" style="margin-left: auto; padding-right: 0.5rem;">0</span>
             <span id="coreChevron" style="display: inline-flex; transition: transform var(--duration-fast);">${icon('chevron-down', 'xs')}</span>
           </button>
-          <span class="tip-icon" title="Bắt buộc job phải có ít nhất một kỹ năng yêu cầu. Bỏ chọn kỹ năng nào thì kỹ năng đó sẽ chuyển xuống Kỹ năng khác.">${icon('circle-help', 'xs')}</span>
+          <span class="tip-icon" data-tooltip-id="skills-core">${icon('circle-help', 'xs')}</span>
         </div>
         <div id="coreChipsContainer" class="chips-grid"></div>
       </div>
@@ -120,7 +120,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             <span id="supportCountBadge" class="caption" style="margin-left: auto; padding-right: 0.5rem;">0</span>
             <span id="supportChevron" style="display: inline-flex; transition: transform var(--duration-fast);">${icon('chevron-down', 'xs')}</span>
           </button>
-          <span class="tip-icon" title="Kỹ năng phụ chỉ cộng thêm điểm. Bỏ chọn kỹ năng nào thì kỹ năng đó sẽ chuyển xuống Kỹ năng khác.">${icon('circle-help', 'xs')}</span>
+          <span class="tip-icon" data-tooltip-id="skills-support">${icon('circle-help', 'xs')}</span>
         </div>
         <div id="supportChipsContainer" class="chips-grid"></div>
       </div>
@@ -134,7 +134,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             <span id="otherCountBadge" class="caption" style="margin-left: auto; padding-right: 0.5rem;">0</span>
             <span id="otherChevron" style="display: inline-flex; transition: transform var(--duration-fast);">${icon('chevron-down', 'xs')}</span>
           </button>
-          <span class="tip-icon" title="Các kỹ năng không được chọn. Job chứa bất kỳ kỹ năng nào trong nhóm này sẽ bị loại. Click vào ô chọn để chuyển kỹ năng trở lại nhóm trên.">${icon('circle-help', 'xs')}</span>
+          <span class="tip-icon" data-tooltip-id="skills-exclude">${icon('circle-help', 'xs')}</span>
         </div>
         <div id="otherChipsContainer" class="chips-grid"></div>
       </div>
@@ -146,14 +146,14 @@ export function createFilterSidebar({ initialFilters, onReload }) {
             ${icon('sliders-horizontal', 'sm')}
             <span class="heading" style="font-size: var(--text-sm);">Thù lao & Tiêu chí nhận job</span>
           </div>
-          <span class="tip-icon" title="Cấu hình mức thù lao tối thiểu và số lượt bid tối đa bạn muốn nhận">${icon('circle-help', 'xs')}</span>
+          <span class="tip-icon" data-tooltip="Cấu hình mức thù lao tối thiểu, điểm sàn chất lượng và mức độ cạnh tranh bạn mong muốn">${icon('circle-help', 'xs')}</span>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);">
           <div>
             <label class="caption" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
               <span>Fixed ≥ ($)</span>
-              <span class="tip-icon" title="Mức thù lao trọn gói tối thiểu theo USD ($) cho cả dự án">${icon('circle-help', 'xs')}</span>
+              <span class="tip-icon" data-tooltip-id="min-fixed">${icon('circle-help', 'xs')}</span>
             </label>
             <input type="number" id="inputMinFixed" value="${draft.minFixed}" min="0" step="50" class="input" />
           </div>
@@ -161,7 +161,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
           <div>
             <label class="caption" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
               <span>Hourly ≥ ($/h)</span>
-              <span class="tip-icon" title="Mức thù lao trả theo giờ tối thiểu theo USD ($/giờ)">${icon('circle-help', 'xs')}</span>
+              <span class="tip-icon" data-tooltip-id="min-hourly">${icon('circle-help', 'xs')}</span>
             </label>
             <input type="number" id="inputMinHourly" value="${draft.minHourly}" min="0" step="5" class="input" />
           </div>
@@ -169,7 +169,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
           <div>
             <label class="caption" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
               <span>Điểm ≥ (0-100)</span>
-              <span class="tip-icon" title="Điểm chất lượng sàn: Kết hợp giữa Thù lao (max 40đ) + Công nghệ (max 40đ) + Cạnh tranh (max 20đ)">${icon('circle-help', 'xs')}</span>
+              <span class="tip-icon" data-tooltip-id="score-threshold">${icon('circle-help', 'xs')}</span>
             </label>
             <input type="number" id="inputMinScore" value="${draft.minScore}" min="0" max="100" class="input" />
           </div>
@@ -177,7 +177,7 @@ export function createFilterSidebar({ initialFilters, onReload }) {
           <div>
             <label class="caption" style="display: flex; justify-content: space-between; margin-bottom: 2px;">
               <span>Bid ít ≤ (n)</span>
-              <span class="tip-icon" title="Mức trần số lượng người chào thầu/proposals để nhận tối đa 20 điểm cạnh tranh">${icon('circle-help', 'xs')}</span>
+              <span class="tip-icon" data-tooltip-id="few-bids">${icon('circle-help', 'xs')}</span>
             </label>
             <input type="number" id="inputFewBids" value="${draft.fewBids}" min="1" max="500" class="input" />
           </div>
@@ -334,25 +334,42 @@ export function createFilterSidebar({ initialFilters, onReload }) {
    * Bind static event listeners
    */
   function bindEvents() {
-    // Reload button - Serializes Sets to Arrays for clean message passing
+    // Reload button - Serializes Sets to Arrays with spin animation feedback
     const reloadBtn = sidebarEl.querySelector('#btnReloadSidebar');
     if (reloadBtn) {
-      reloadBtn.addEventListener('click', () => {
+      reloadBtn.addEventListener('click', async () => {
+        reloadBtn.classList.add('is-loading');
+        reloadBtn.disabled = true;
+        const iconEl = reloadBtn.querySelector('.icon, svg');
+        if (iconEl) iconEl.classList.add('icon--spin');
+
+        const startTime = Date.now();
+
         const otherSkills = ALL_CATALOG_SKILLS.filter(s => !draft.core.has(s.id) && !draft.support.has(s.id));
         draft.exclude = new Set(otherSkills.map(s => s.id));
 
-        onReload({
-          platforms: [...draft.platforms],
-          core: Array.from(draft.core),
-          support: Array.from(draft.support),
-          exclude: Array.from(draft.exclude),
-          minFixed: draft.minFixed,
-          minHourly: draft.minHourly,
-          minScore: draft.minScore,
-          fewBids: draft.fewBids,
-          showDiscarded: draft.showDiscarded,
-          sort: draft.sort,
-        });
+        try {
+          await Promise.resolve(onReload({
+            platforms: [...draft.platforms],
+            core: Array.from(draft.core),
+            support: Array.from(draft.support),
+            exclude: Array.from(draft.exclude),
+            minFixed: draft.minFixed,
+            minHourly: draft.minHourly,
+            minScore: draft.minScore,
+            fewBids: draft.fewBids,
+            showDiscarded: draft.showDiscarded,
+            sort: draft.sort,
+          }));
+        } finally {
+          const elapsed = Date.now() - startTime;
+          const remainingDelay = Math.max(0, 500 - elapsed);
+          setTimeout(() => {
+            reloadBtn.classList.remove('is-loading');
+            reloadBtn.disabled = false;
+            if (iconEl) iconEl.classList.remove('icon--spin');
+          }, remainingDelay);
+        }
       });
     }
 
@@ -605,6 +622,22 @@ export function createFilterSidebar({ initialFilters, onReload }) {
       sidebarEl.setShowDiscarded(newFilters.showDiscarded);
     }
     renderSkillChips();
+  };
+
+  sidebarEl.setReloading = (loading) => {
+    const btn = sidebarEl.querySelector('#btnReloadSidebar');
+    if (btn) {
+      const iconEl = btn.querySelector('.icon, svg');
+      if (loading) {
+        btn.classList.add('is-loading');
+        btn.disabled = true;
+        if (iconEl) iconEl.classList.add('icon--spin');
+      } else {
+        btn.classList.remove('is-loading');
+        btn.disabled = false;
+        if (iconEl) iconEl.classList.remove('icon--spin');
+      }
+    }
   };
 
   return sidebarEl;

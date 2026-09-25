@@ -12,6 +12,7 @@ export function renderJobCard(evaluation, isStarred, isHidden, isViewed) {
   const { job, maxUsd, score, breakdown, status, reason, matchedCore, matchedSupport } = evaluation;
   const isPassed = status === 'passed';
   const isHourly = job.type === 'hourly';
+  const isUpwork = job.platform === 'upwork';
 
   const meta = PLATFORMS[job.platform] || {
     badgeClass: 'platform-badge--freelancer',
@@ -88,7 +89,7 @@ export function renderJobCard(evaluation, isStarred, isHidden, isViewed) {
 
       <div class="meta">
         <dt>${icon('users', 'xs')} ${isUpwork ? 'Proposals (bids)' : 'Số lượng bid'}</dt>
-        <dd>${job.bids}</dd>
+        <dd>${typeof job.bids === 'number' ? job.bids : (typeof job.bidsCount === 'number' ? job.bidsCount : 0)}</dd>
       </div>
 
       <div class="meta">

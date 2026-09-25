@@ -17,6 +17,7 @@ export const REMOTEOK_SNAPSHOT = [
     budgetMax: 145000,
     currency: 'USD',
     type: 'fixed',
+    bids: 7,
     bidsCount: 7,
     skills: [
       { id: 759, name: 'React.js' },
@@ -120,6 +121,7 @@ export class RemoteOKAdapter extends JobSourceAdapter {
           budgetMax: max,
           currency: 'USD',
           type: 'fixed',
+          bids: Math.floor(Math.random() * 6) + 3,
           bidsCount: Math.floor(Math.random() * 6) + 3, // Representative low competition for direct remote listings
           skills,
           submittedAt: timestamp,

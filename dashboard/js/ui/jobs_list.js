@@ -107,7 +107,9 @@ export function renderJobsList(
     activeTab = 'all',
     sort = 'score',
     showDiscarded = false,
-  }
+    limit,
+    onLoadMore,
+  } = {}
 ) {
   container.innerHTML = '';
 

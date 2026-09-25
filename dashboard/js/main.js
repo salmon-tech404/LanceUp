@@ -13,6 +13,8 @@ import { evaluateJob } from '../../shared/domain/evaluate.js';
 import { DEFAULTS } from '../../shared/config/constants.js';
 import { SKILL_GROUPS } from '../../shared/config/skills.js';
 import { icon } from '../../shared/utils/icons.js';
+import { initTooltips } from './ui/tooltip_manager.js';
+import { showToast } from './ui/toast_manager.js';
 
 // Global state
 let personalStore = readStore();
@@ -142,6 +144,9 @@ async function loadJobs() {
     btnScanNow.disabled = true;
     btnScanNow.classList.add('is-loading');
   }
+  if (sidebarEl && sidebarEl.setReloading) {
+    sidebarEl.setReloading(true);
+  }
 
   renderSkeleton(jobsContainer, 4);
 
@@ -149,7 +154,6 @@ async function loadJobs() {
     const coreSkillIds = [...filters.core];
     const result = await fetchMultiPlatformJobs(filters.platforms, coreSkillIds);
     cachedJobs = result.jobs;
-    reEvaluateAndRender();
   } catch (err) {
     console.error('Failed to load multi-platform jobs:', err);
     renderEmptyState(jobsContainer, {
@@ -159,12 +163,29 @@ async function loadJobs() {
       actionText: 'Thử lại',
       onAction: () => loadJobs(),
     });
+    return;
   } finally {
     isScanning = false;
     if (btnScanNow) {
       btnScanNow.disabled = false;
       btnScanNow.classList.remove('is-loading');
     }
+    if (sidebarEl && sidebarEl.setReloading) {
+      sidebarEl.setReloading(false);
+    }
+  }
+
+  try {
+    reEvaluateAndRender();
+  } catch (err) {
+    console.error('Failed to render jobs list:', err);
+    renderEmptyState(jobsContainer, {
+      type: 'error',
+      title: 'Lỗi hiển thị danh sách việc làm',
+      message: 'Đã nhận được dữ liệu nhưng xảy ra lỗi trong quá trình hiển thị giao diện.',
+      actionText: 'Thử lại',
+      onAction: () => reEvaluateAndRender(),
+    });
   }
 }
 
@@ -172,8 +193,9 @@ async function loadJobs() {
  * Initialize application UI and event listeners
  */
 function initApp() {
-  // 1. Theme toggle
+  // 1. Theme toggle & global tooltips
   initTheme(themeToggle);
+  initTooltips();
 
   // 2. Set control initial values
   if (selectSort) {
@@ -258,7 +280,7 @@ function initApp() {
   if (sidebarMount) {
     sidebarEl = createFilterSidebar({
       initialFilters: filters,
-      onReload: (newFilters) => {
+      onReload: async (newFilters) => {
         const newCoreSet = new Set(newFilters.core);
         const platformsChanged = JSON.stringify(filters.platforms.slice().sort()) !== JSON.stringify(newFilters.platforms.slice().sort());
         const coreChanged = filters.core.size !== newCoreSet.size || [...filters.core].some(id => !newCoreSet.has(id));
@@ -288,10 +310,11 @@ function initApp() {
 
         // If platform selection or core skills changed, re-fetch from platforms
         if (platformsChanged || coreChanged) {
-          loadJobs();
+          await loadJobs();
         } else {
           // Pure re-filtering without network request
           reEvaluateAndRender();
+          showToast({ message: 'Đã cập nhật tiêu chí và lọc lại bảng tin!', tone: 'success' });
         }
       },
     });
